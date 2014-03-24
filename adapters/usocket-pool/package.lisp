@@ -7,10 +7,8 @@
 
 (require '#:sb-concurrency)
 
-(defpackage #:mongo-cl-driver.adapters.iolib
-  (:nicknames #:mongo.iolib)
-  (:use #:cl #:mongo-cl-driver.adapters #:mongo-cl-driver.wire #:cl-async-future)
+(defpackage #:mongo-cl-driver.adapters.usocket-pool
+  (:nicknames #:mongo.usocket-pool)
+  (:use #:cl #:mongo-cl-driver.adapters #:mongo-cl-driver.wire)
   (:import-from #:mongo-cl-driver.bson #:ub8)
-  (:import-from #:alexandria #:with-gensyms #:once-only)
-  (:export #:mongo-client
-           #:sockets-opened))
+  (:import-from #:alexandria #:with-gensyms #:once-only))
