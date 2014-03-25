@@ -14,7 +14,12 @@
   (setf (mongo-client-sockets client) (sb-concurrency:make-queue)))
 
 (defmethod mongo-cl-driver:create-mongo-client ((adapter (eql :usocket-pool)) &key write-concern server)
-  (make-instance 'mongo-client :write-concern write-concern :server server))
+  (let ((client (make-instance 'mongo-client
+                               :write-concern write-concern
+                               :server server)))
+    ;; Try to open one connection immediately to test the configuration
+    (put-socket client (take-socket client))
+    client))
 
 (defmethod send-message ((client mongo-client) msg &key write-concern)
   (with-client-socket (socket client)
@@ -34,6 +39,3 @@
       (when condition
         (error condition))
       reply)))
-
-(defun sockets-opened (client)
-  (sb-concurrency:queue-count (mongo-client-sockets client)))
